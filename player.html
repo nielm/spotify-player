@@ -113,16 +113,6 @@
         <!-- MAIN VIEW (Setup / Player Center Area) -->
         <main class="flex-1 bg-gradient-to-b from-neutral-900 to-spotify-dark overflow-y-auto p-4 md:p-8 flex flex-col justify-center items-center relative">
             
-            <!-- Language Selector Dropdown -->
-            <div class="absolute top-4 right-4 z-40">
-                <select id="lang-selector" class="bg-neutral-800 border border-neutral-700 text-xs text-spotify-subtle rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-spotify-green cursor-pointer">
-                    <option value="en">English (EN)</option>
-                    <option value="es">Español (ES)</option>
-                    <option value="fr">Français (FR)</option>
-                    <option value="de">Deutsch (DE)</option>
-                </select>
-            </div>
-
             <!-- AUTH / SETUP SECTION -->
             <div id="auth-section" class="w-full max-w-md bg-spotify-card p-6 md:p-8 rounded-xl shadow-2xl border border-neutral-800 text-center space-y-6">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-spotify-green/10 text-spotify-green rounded-full text-3xl">
@@ -346,7 +336,29 @@
         };
 
         const STORAGE_KEY_LANG = 'app_language';
-        let currentLang = localStorage.getItem(STORAGE_KEY_LANG) || 'en';
+
+        function getLanguageFromUrl() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const hl = params.get('hl');
+                if (hl) {
+                    const normalized = hl.toLowerCase().trim();
+                    const base = normalized.split(/[-_]/)[0];
+                    if (translations[normalized]) {
+                        return normalized;
+                    }
+                    if (translations[base]) {
+                        return base;
+                    }
+                    return 'en';
+                }
+            } catch (e) {
+                console.error("Error reading hl parameter:", e);
+            }
+            return null;
+        }
+
+        let currentLang = getLanguageFromUrl() || localStorage.getItem(STORAGE_KEY_LANG) || 'en';
 
         function t(key) {
             return (translations[currentLang] && translations[currentLang][key]) || 
@@ -356,6 +368,9 @@
         function applyTranslations(lang) {
             currentLang = lang || currentLang;
             localStorage.setItem(STORAGE_KEY_LANG, currentLang);
+            if (document.documentElement) {
+                document.documentElement.lang = currentLang;
+            }
 
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
@@ -432,8 +447,7 @@
             get deviceStatus() { return getEl('device-status'); },
             get volumeSlider() { return getEl('volume-slider'); },
             get volDownBtn() { return getEl('vol-down-btn'); },
-            get volUpBtn() { return getEl('vol-up-btn'); },
-            get langSelector() { return getEl('lang-selector'); }
+            get volUpBtn() { return getEl('vol-up-btn'); }
         };
 
         // UI Notification Display
@@ -530,7 +544,11 @@
                 const data = await response.json();
                 if (data.access_token) {
                     saveTokens(data);
-                    window.history.replaceState({}, document.title, getRedirectUri());
+                    const hlParam = (new URLSearchParams(window.location.search)).get('hl');
+                    const cleanRedirect = hlParam 
+                        ? `${getRedirectUri()}?hl=${encodeURIComponent(hlParam)}`
+                        : getRedirectUri();
+                    window.history.replaceState({}, document.title, cleanRedirect);
                     initApp();
                 } else {
                     showNotification("Failed to authenticate: " + (data.error_description || "Unknown error"));
@@ -915,12 +933,13 @@
             // Apply initial translations
             applyTranslations(currentLang);
 
-            if (elements.langSelector) {
-                elements.langSelector.value = currentLang;
-                elements.langSelector.addEventListener('change', (e) => {
-                    applyTranslations(e.target.value);
-                });
-            }
+            // Listen for popstate changes to handle browser back/forward with hl query parameter
+            window.addEventListener('popstate', () => {
+                const lang = getLanguageFromUrl() || localStorage.getItem(STORAGE_KEY_LANG) || 'en';
+                if (lang !== currentLang) {
+                    applyTranslations(lang);
+                }
+            });
 
             // Display Current Redirect URL for setup guidance
             if (elements.currentUrlDisplay) {
