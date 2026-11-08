@@ -782,7 +782,7 @@
             // Errors
             spotifyPlayer.addListener('initialization_error', ({ message }) =>{
                  console.error("Init Error:", message);
-                showNotification("init error"+message);
+                showNotification("init error "+message);
             });
             spotifyPlayer.addListener('authentication_error', ({ message }) => {
                 console.error("Auth Error:", message);
@@ -966,6 +966,8 @@
         function initApp() {
             const token = getAccessToken();
             const expiresAt = localStorage.getItem(STORAGE_KEY_EXPIRES_AT);
+
+            document.body.requestFullscreen({navigationUI: "hide"});
 
             if (token && expiresAt && Date.now() < parseInt(expiresAt)) {
                 showLoggedInUI();
