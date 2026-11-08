@@ -90,9 +90,9 @@
             <div class="p-4 border-b border-neutral-800 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <i class="fa-solid fa-[#1DB954] fa-spotify text-spotify-green text-2xl"></i>
-                    <h2 class="text-base font-bold tracking-tight">Your Playlists</h2>
+                    <h2 class="text-base font-bold tracking-tight" data-i18n="sidebar.title">Your Playlists</h2>
                 </div>
-                <button id="refresh-playlists-btn" title="Refresh Playlists" class="text-spotify-subtle hover:text-white transition">
+                <button id="refresh-playlists-btn" data-i18n-title="sidebar.refresh" title="Refresh Playlists" class="text-spotify-subtle hover:text-white transition">
                     <i class="fa-solid fa-rotate-right text-sm"></i>
                 </button>
             </div>
@@ -111,33 +111,43 @@
         </aside>
 
         <!-- MAIN VIEW (Setup / Player Center Area) -->
-        <main class="flex-1 bg-gradient-to-b from-neutral-900 to-spotify-dark overflow-y-auto p-4 md:p-8 flex flex-col justify-center items-center">
+        <main class="flex-1 bg-gradient-to-b from-neutral-900 to-spotify-dark overflow-y-auto p-4 md:p-8 flex flex-col justify-center items-center relative">
             
+            <!-- Language Selector Dropdown -->
+            <div class="absolute top-4 right-4 z-40">
+                <select id="lang-selector" class="bg-neutral-800 border border-neutral-700 text-xs text-spotify-subtle rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-spotify-green cursor-pointer">
+                    <option value="en">English (EN)</option>
+                    <option value="es">Español (ES)</option>
+                    <option value="fr">Français (FR)</option>
+                    <option value="de">Deutsch (DE)</option>
+                </select>
+            </div>
+
             <!-- AUTH / SETUP SECTION -->
             <div id="auth-section" class="w-full max-w-md bg-spotify-card p-6 md:p-8 rounded-xl shadow-2xl border border-neutral-800 text-center space-y-6">
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-spotify-green/10 text-spotify-green rounded-full text-3xl">
                     <i class="fa-brands fa-spotify"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight">Spotify Web Controller</h1>
-                    <p class="text-xs text-spotify-subtle mt-2">Connect your Spotify account to stream music directly in this browser window and play your playlists.</p>
+                    <h1 class="text-2xl font-bold tracking-tight" data-i18n="app.title">Spotify Web Controller</h1>
+                    <p class="text-xs text-spotify-subtle mt-2" data-i18n="auth.description">Connect your Spotify account to stream music directly in this browser window and play your playlists.</p>
                 </div>
 
                 <div class="space-y-4 text-left">
                     <div>
-                        <label for="client-id-input" class="block text-xs font-semibold uppercase tracking-wider text-spotify-subtle mb-1">Spotify Client ID</label>
-                        <input type="text" id="client-id-input" placeholder="e.g. 4f8d2b901a..." class="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-lg text-sm text-white focus:outline-none focus:border-spotify-green transition">
+                        <label for="client-id-input" class="block text-xs font-semibold uppercase tracking-wider text-spotify-subtle mb-1" data-i18n="auth.clientIdLabel">Spotify Client ID</label>
+                        <input type="text" id="client-id-input" data-i18n-placeholder="auth.clientIdPlaceholder" placeholder="e.g. 4f8d2b901a..." class="w-full px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-lg text-sm text-white focus:outline-none focus:border-spotify-green transition">
                     </div>
 
                     <div class="bg-neutral-900 p-3 rounded-lg border border-neutral-800 text-xs text-spotify-subtle space-y-1">
-                        <div class="font-semibold text-white">Redirect URI for Developer App:</div>
+                        <div class="font-semibold text-white" data-i18n="auth.redirectLabel">Redirect URI for Developer App:</div>
                         <div id="current-url-display" class="font-mono bg-black p-1.5 rounded text-[11px] truncate select-all text-neutral-300"></div>
                     </div>
                 </div>
 
                 <button id="login-btn" class="w-full py-3 bg-spotify-green hover:bg-spotify-greenHover text-black font-bold rounded-full transition transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
                     <i class="fa-brands fa-spotify"></i>
-                    <span>Connect with Spotify</span>
+                    <span data-i18n="auth.connectBtn">Connect with Spotify</span>
                 </button>
             </div>
 
@@ -148,13 +158,13 @@
                 <div class="flex justify-between items-center text-xs text-spotify-subtle pb-4 border-b border-neutral-800">
                     <div class="flex items-center space-x-2">
                         <img id="user-avatar" src="https://placehold.co/32x32/181818/a7a7a7?text=U" class="w-6 h-6 rounded-full object-cover" alt="User">
-                        <span id="user-name" class="font-medium text-white truncate max-w-[150px]">Connected User</span>
+                        <span id="user-name" class="font-medium text-white truncate max-w-[150px]" data-i18n="player.defaultUser">Connected User</span>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <span id="device-status" class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-amber-500/10 text-amber-400">
+                        <span id="device-status" class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-amber-500/10 text-amber-400" data-i18n="status.initializing">
                             Initializing Web SDK...
                         </span>
-                        <button id="logout-btn" title="Disconnect" class="hover:text-white transition">
+                        <button id="logout-btn" data-i18n-title="player.disconnect" title="Disconnect" class="hover:text-white transition">
                             <i class="fa-solid fa-power-off"></i>
                         </button>
                     </div>
@@ -167,8 +177,8 @@
 
                 <!-- Track Details -->
                 <div class="space-y-1">
-                    <h3 id="track-title" class="text-xl font-bold text-white truncate">No Track Playing</h3>
-                    <p id="artist-name" class="text-sm text-spotify-subtle truncate">Select a playlist to start streaming</p>
+                    <h3 id="track-title" class="text-xl font-bold text-white truncate" data-i18n="player.noTrackTitle">No Track Playing</h3>
+                    <p id="artist-name" class="text-sm text-spotify-subtle truncate" data-i18n="player.noTrackArtist">Select a playlist to start streaming</p>
                     <p id="album-name" class="text-xs text-neutral-500 truncate">-</p>
                 </div>
 
@@ -210,6 +220,134 @@
 
     <!-- JAVASCRIPT APPLICATION LOGIC -->
     <script>
+        // Internationalization (i18n) Translation Dictionaries
+        const translations = {
+            en: {
+                "app.title": "Spotify Web Controller",
+                "auth.description": "Connect your Spotify account to stream music directly in this browser window and play your playlists.",
+                "auth.clientIdLabel": "Spotify Client ID",
+                "auth.clientIdPlaceholder": "e.g. 4f8d2b901a...",
+                "auth.redirectLabel": "Redirect URI for Developer App:",
+                "auth.connectBtn": "Connect with Spotify",
+                "sidebar.title": "Your Playlists",
+                "sidebar.refresh": "Refresh Playlists",
+                "sidebar.tracks": "tracks",
+                "sidebar.noPlaylists": "No playlists found.",
+                "sidebar.loadError": "Failed to load playlists. Please re-connect.",
+                "player.defaultUser": "Connected User",
+                "player.disconnect": "Disconnect",
+                "player.noTrackTitle": "No Track Playing",
+                "player.noTrackArtist": "Select a playlist to start streaming",
+                "status.initializing": "Initializing Web SDK...",
+                "status.active": "Web Player Active",
+                "status.offline": "Web Player Offline",
+                "notif.missingClientId": "Please enter a valid Spotify Client ID.",
+                "notif.authSetupMissing": "Authentication setup missing. Please reconnect.",
+                "notif.noDevice": "No active Spotify device found. Ensure Spotify or Web Player is ready.",
+                "notif.premiumRequired": "Playback control requires a Spotify Premium account."
+            },
+            es: {
+                "app.title": "Controlador Web de Spotify",
+                "auth.description": "Conecta tu cuenta de Spotify para reproducir música directamente en este navegador y escuchar tus listas de reproducción.",
+                "auth.clientIdLabel": "ID de Cliente de Spotify",
+                "auth.clientIdPlaceholder": "ej. 4f8d2b901a...",
+                "auth.redirectLabel": "URI de Redirección para la App:",
+                "auth.connectBtn": "Conectar con Spotify",
+                "sidebar.title": "Tus Listas",
+                "sidebar.refresh": "Actualizar Listas",
+                "sidebar.tracks": "canciones",
+                "sidebar.noPlaylists": "No se encontraron listas.",
+                "sidebar.loadError": "Error al cargar listas. Vuelve a conectarte.",
+                "player.defaultUser": "Usuario Conectado",
+                "player.disconnect": "Desconectar",
+                "player.noTrackTitle": "Sin reproducción",
+                "player.noTrackArtist": "Selecciona una lista para comenzar",
+                "status.initializing": "Iniciando Web SDK...",
+                "status.active": "Reproductor Web Activo",
+                "status.offline": "Reproductor Fuera de Línea",
+                "notif.missingClientId": "Por favor ingresa un ID de Cliente válido.",
+                "notif.authSetupMissing": "Falta la configuración de autenticación. Reorganiza la conexión.",
+                "notif.noDevice": "No se encontró ningún dispositivo activo. Asegúrate de tener Spotify listo.",
+                "notif.premiumRequired": "El control de reproducción requiere una cuenta Spotify Premium."
+            },
+            fr: {
+                "app.title": "Contrôleur Web Spotify",
+                "auth.description": "Connectez votre compte Spotify pour écouter de la musique directement dans ce navigateur et lire vos playlists.",
+                "auth.clientIdLabel": "ID Client Spotify",
+                "auth.clientIdPlaceholder": "ex. 4f8d2b901a...",
+                "auth.redirectLabel": "URI de Redirection pour l'App :",
+                "auth.connectBtn": "Se connecter à Spotify",
+                "sidebar.title": "Vos Playlists",
+                "sidebar.refresh": "Actualiser les Playlists",
+                "sidebar.tracks": "titres",
+                "sidebar.noPlaylists": "Aucune playlist trouvée.",
+                "sidebar.loadError": "Échec du chargement des playlists. Veuillez vous reconnecter.",
+                "player.defaultUser": "Utilisateur Connecté",
+                "player.disconnect": "Déconnexion",
+                "player.noTrackTitle": "Aucun titre en cours",
+                "player.noTrackArtist": "Sélectionnez une playlist pour démarrer",
+                "status.initializing": "Initialisation du SDK...",
+                "status.active": "Lecteur Web Actif",
+                "status.offline": "Lecteur Web Hors Ligne",
+                "notif.missingClientId": "Veuillez saisir un ID Client Spotify valide.",
+                "notif.authSetupMissing": "Configuration d'authentification manquante.",
+                "notif.noDevice": "Aucun appareil actif trouvé.",
+                "notif.premiumRequired": "La lecture nécessite un compte Spotify Premium."
+            },
+            de: {
+                "app.title": "Spotify Web Controller",
+                "auth.description": "Verbinde dein Spotify-Konto, um Musik direkt in diesem Browser zu streamen und deine Playlists abzuspielen.",
+                "auth.clientIdLabel": "Spotify Client-ID",
+                "auth.clientIdPlaceholder": "z.B. 4f8d2b901a...",
+                "auth.redirectLabel": "Redirect-URI für die App:",
+                "auth.connectBtn": "Mit Spotify verbinden",
+                "sidebar.title": "Deine Playlists",
+                "sidebar.refresh": "Playlists aktualisieren",
+                "sidebar.tracks": "Titel",
+                "sidebar.noPlaylists": "Keine Playlists gefunden.",
+                "sidebar.loadError": "Playlists konnten nicht geladen werden.",
+                "player.defaultUser": "Angemeldeter Benutzer",
+                "player.disconnect": "Trennen",
+                "player.noTrackTitle": "Kein Titel wird abgespielt",
+                "player.noTrackArtist": "Wähle eine Playlist zum Abspielen aus",
+                "status.initializing": "Web SDK wird initialisiert...",
+                "status.active": "Web Player Aktiv",
+                "status.offline": "Web Player Offline",
+                "notif.missingClientId": "Bitte gib eine gültige Spotify Client-ID ein.",
+                "notif.authSetupMissing": "Authentifizierungseinstellungen fehlen.",
+                "notif.noDevice": "Kein aktives Gerät gefunden.",
+                "notif.premiumRequired": "Wiedergabesteuerung erfordert ein Spotify Premium-Konto."
+            }
+        };
+
+        const STORAGE_KEY_LANG = 'app_language';
+        let currentLang = localStorage.getItem(STORAGE_KEY_LANG) || 'en';
+
+        function t(key) {
+            return (translations[currentLang] && translations[currentLang][key]) || 
+                   (translations['en'] && translations['en'][key]) || key;
+        }
+
+        function applyTranslations(lang) {
+            currentLang = lang || currentLang;
+            localStorage.setItem(STORAGE_KEY_LANG, currentLang);
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.textContent = t(key);
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                el.setAttribute('placeholder', t(key));
+            });
+
+            document.querySelectorAll('[data-i18n-title]').forEach(el => {
+                const key = el.getAttribute('data-i18n-title');
+                el.setAttribute('title', t(key));
+            });
+        }
+
         // OAuth Scopes Required for Playlists & Browser Audio Streaming
         const SCOPES = [
             'user-read-currently-playing',
@@ -233,7 +371,6 @@
         let spotifyPlayer = null;
         let webDeviceId = null;
         let pollPlaybackInterval = null;
-        let isPlayerConnected = false;
 
         // Lazy DOM elements getter helper
         function getEl(id) {
@@ -267,7 +404,8 @@
             get userName() { return getEl('user-name'); },
             get userAvatar() { return getEl('user-avatar'); },
             get deviceStatus() { return getEl('device-status'); },
-            get volumeSlider() { return getEl('volume-slider'); }
+            get volumeSlider() { return getEl('volume-slider'); },
+            get langSelector() { return getEl('lang-selector'); }
         };
 
         // UI Notification Display
@@ -315,7 +453,7 @@
         async function redirectToSpotifyAuth() {
             const clientId = elements.clientIdInput ? elements.clientIdInput.value.trim() : '';
             if (!clientId) {
-                showNotification("Please enter a valid Spotify Client ID.");
+                showNotification(t("notif.missingClientId"));
                 return;
             }
             localStorage.setItem(STORAGE_KEY_CLIENT_ID, clientId);
@@ -344,7 +482,7 @@
             const codeVerifier = localStorage.getItem(STORAGE_KEY_CODE_VERIFIER);
 
             if (!clientId || !codeVerifier) {
-                showNotification("Authentication setup missing. Please reconnect.");
+                showNotification(t("notif.authSetupMissing"));
                 return;
             }
 
@@ -367,7 +505,7 @@
                     window.history.replaceState({}, document.title, getRedirectUri());
                     initApp();
                 } else {
-                    showNotification("Failed to authenticate with Spotify: " + (data.error_description || "Unknown error"));
+                    showNotification("Failed to authenticate: " + (data.error_description || "Unknown error"));
                 }
             } catch (err) {
                 console.error(err);
@@ -423,7 +561,7 @@
                 });
                 if (res.ok) {
                     const profile = await res.json();
-                    if (elements.userName) elements.userName.textContent = profile.display_name || 'Spotify User';
+                    if (elements.userName) elements.userName.textContent = profile.display_name || t("player.defaultUser");
                     if (elements.userAvatar && profile.images && profile.images[0]) {
                         elements.userAvatar.src = profile.images[0].url;
                     }
@@ -453,7 +591,7 @@
             } catch (err) {
                 console.error("Failed to fetch playlists", err);
                 if (elements.playlistContainer) {
-                    elements.playlistContainer.innerHTML = `<div class="p-4 text-xs text-red-400 text-center">Failed to load playlists. Please re-connect.</div>`;
+                    elements.playlistContainer.innerHTML = `<div class="p-4 text-xs text-red-400 text-center">${t("sidebar.loadError")}</div>`;
                 }
             }
         }
@@ -463,7 +601,7 @@
             if (!elements.playlistContainer) return;
 
             if (playlists.length === 0) {
-                elements.playlistContainer.innerHTML = `<div class="p-4 text-xs text-spotify-subtle text-center">No playlists found.</div>`;
+                elements.playlistContainer.innerHTML = `<div class="p-4 text-xs text-spotify-subtle text-center">${t("sidebar.noPlaylists")}</div>`;
                 return;
             }
 
@@ -471,7 +609,7 @@
                 const imgUrl = pl.images && pl.images[0] ? pl.images[0].url : 'https://placehold.co/48x48/282828/a7a7a7?text=Music';
                 const trackCount = pl.tracks && typeof pl.tracks.total === 'number' ? pl.tracks.total : null;
                 const trackBadgeHtml = trackCount !== null && trackCount > 0 
-                    ? `<span class="text-[10px] text-spotify-subtle block">${trackCount} tracks</span>`
+                    ? `<span class="text-[10px] text-spotify-subtle block">${trackCount} ${t("sidebar.tracks")}</span>`
                     : '';
 
                 return `
@@ -495,7 +633,6 @@
             const body = { context_uri: contextUri };
 
             try {
-                // If Web SDK device is active, direct playback to it specifically
                 const url = webDeviceId 
                     ? `https://api.spotify.com/v1/me/player/play?device_id=${webDeviceId}`
                     : `https://api.spotify.com/v1/me/player/play`;
@@ -510,9 +647,9 @@
                 });
 
                 if (res.status === 404) {
-                    showNotification("No active Spotify device found. Ensure Spotify or Web Player is ready.");
+                    showNotification(t("notif.noDevice"));
                 } else if (res.status === 403) {
-                    showNotification("Playback control requires a Spotify Premium account.");
+                    showNotification(t("notif.premiumRequired"));
                 } else if (!res.ok) {
                     const err = await res.json();
                     showNotification("Unable to play playlist: " + (err.error?.message || "Error"));
@@ -541,7 +678,7 @@
                 console.log('Web Playback SDK Ready with Device ID:', device_id);
                 webDeviceId = device_id;
                 if (elements.deviceStatus) {
-                    elements.deviceStatus.textContent = "Web Player Active";
+                    elements.deviceStatus.textContent = t("status.active");
                     elements.deviceStatus.className = "inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-spotify-green/20 text-spotify-green";
                 }
                 transferPlaybackToDevice(device_id);
@@ -551,7 +688,7 @@
             spotifyPlayer.addListener('not_ready', ({ device_id }) => {
                 console.log('Device ID has gone offline', device_id);
                 if (elements.deviceStatus) {
-                    elements.deviceStatus.textContent = "Web Player Offline";
+                    elements.deviceStatus.textContent = t("status.offline");
                     elements.deviceStatus.className = "inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-red-500/10 text-red-400";
                 }
             });
@@ -569,7 +706,7 @@
                 logout();
             });
             spotifyPlayer.addListener('account_error', ({ message }) => {
-                showNotification("Spotify Web Player streaming requires a Spotify Premium account.");
+                showNotification(t("notif.premiumRequired"));
             });
 
             spotifyPlayer.connect();
@@ -680,7 +817,6 @@
                 spotifyPlayer.togglePlay();
                 return;
             }
-            // API Fallback
             const token = getAccessToken();
             if (!token) return;
             const isPaused = elements.playIcon && elements.playIcon.classList.contains('fa-play');
@@ -735,7 +871,6 @@
                     window.initSpotifySDK();
                 }
 
-                // Poll backup playback status
                 pollPlaybackInterval = setInterval(fetchPlaybackState, 4000);
             } else {
                 showLoggedOutUI();
@@ -744,6 +879,16 @@
 
         // Bind DOM Event Listeners after page DOM is fully loaded
         document.addEventListener('DOMContentLoaded', () => {
+            // Apply initial translations
+            applyTranslations(currentLang);
+
+            if (elements.langSelector) {
+                elements.langSelector.value = currentLang;
+                elements.langSelector.addEventListener('change', (e) => {
+                    applyTranslations(e.target.value);
+                });
+            }
+
             // Display Current Redirect URL for setup guidance
             if (elements.currentUrlDisplay) {
                 elements.currentUrlDisplay.textContent = getRedirectUri();
@@ -760,7 +905,6 @@
                     elements.clientIdInput.value = clientIdParam;
                 }
             } else {
-                // Restore stored Client ID if present
                 const storedClientId = localStorage.getItem(STORAGE_KEY_CLIENT_ID);
                 if (storedClientId && elements.clientIdInput) {
                     elements.clientIdInput.value = storedClientId;
