@@ -749,10 +749,22 @@
                 elements.currentUrlDisplay.textContent = getRedirectUri();
             }
 
-            // Restore stored Client ID if present
-            const storedClientId = localStorage.getItem(STORAGE_KEY_CLIENT_ID);
-            if (storedClientId && elements.clientIdInput) {
-                elements.clientIdInput.value = storedClientId;
+            // Check URL parameters for client_id/clientId or OAuth authorization code
+            const urlParams = new URLSearchParams(window.location.search);
+            const clientIdParam = urlParams.get('client_id') || urlParams.get('clientId');
+            const code = urlParams.get('code');
+
+            if (clientIdParam) {
+                localStorage.setItem(STORAGE_KEY_CLIENT_ID, clientIdParam);
+                if (elements.clientIdInput) {
+                    elements.clientIdInput.value = clientIdParam;
+                }
+            } else {
+                // Restore stored Client ID if present
+                const storedClientId = localStorage.getItem(STORAGE_KEY_CLIENT_ID);
+                if (storedClientId && elements.clientIdInput) {
+                    elements.clientIdInput.value = storedClientId;
+                }
             }
 
             // Event Listeners
@@ -773,10 +785,6 @@
                     }
                 });
             }
-
-            // Check if returning from OAuth redirect code parameter
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
 
             if (code) {
                 handleAuthCallback(code);
