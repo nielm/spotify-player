@@ -211,11 +211,15 @@
                     </button>
                 </div>
 
-                <!-- Volume Slider Control -->
-                <div class="flex items-center space-x-3 pt-2 max-w-xs mx-auto">
-                    <i class="fa-solid fa-volume-low text-xs text-spotify-subtle"></i>
-                    <input type="range" id="volume-slider" min="0" max="100" value="70" class="w-full accent-spotify-green bg-neutral-800 h-1 rounded-lg appearance-none cursor-pointer">
-                    <i class="fa-solid fa-volume-high text-xs text-spotify-subtle"></i>
+                <!-- Volume Control -->
+                <div class="flex items-center space-x-4 pt-4 max-w-xs mx-auto">
+                    <button id="vol-down-btn" title="Decrease volume" class="text-spotify-subtle hover:text-white transition active:scale-90 p-2 focus:outline-none">
+                        <i class="fa-solid fa-volume-low text-2xl"></i>
+                    </button>
+                    <input type="range" id="volume-slider" min="0" max="100" value="70" class="w-full accent-spotify-green bg-neutral-800 h-1.5 rounded-lg appearance-none cursor-pointer">
+                    <button id="vol-up-btn" title="Increase volume" class="text-spotify-subtle hover:text-white transition active:scale-90 p-2 focus:outline-none">
+                        <i class="fa-solid fa-volume-high text-2xl"></i>
+                    </button>
                 </div>
 
             </div>
@@ -427,6 +431,8 @@
             get userAvatar() { return getEl('user-avatar'); },
             get deviceStatus() { return getEl('device-status'); },
             get volumeSlider() { return getEl('volume-slider'); },
+            get volDownBtn() { return getEl('vol-down-btn'); },
+            get volUpBtn() { return getEl('vol-up-btn'); },
             get langSelector() { return getEl('lang-selector'); }
         };
 
@@ -955,6 +961,24 @@
                         spotifyPlayer.setVolume(vol);
                     }
                 });
+            }
+
+            function adjustVolume(step) {
+                if (!elements.volumeSlider) return;
+                let currentVal = parseInt(elements.volumeSlider.value, 10) || 0;
+                let newVal = Math.min(100, Math.max(0, currentVal + step));
+                elements.volumeSlider.value = newVal;
+                if (spotifyPlayer) {
+                    spotifyPlayer.setVolume(newVal / 100);
+                }
+            }
+
+            if (elements.volDownBtn) {
+                elements.volDownBtn.addEventListener('click', () => adjustVolume(-10));
+            }
+
+            if (elements.volUpBtn) {
+                elements.volUpBtn.addEventListener('click', () => adjustVolume(10));
             }
 
             if (code) {
