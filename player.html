@@ -89,7 +89,7 @@
             <!-- Sidebar Header -->
             <div class="p-4 border-b border-neutral-800 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-[#1DB954] fa-spotify text-spotify-green text-2xl"></i>
+                    <i class="fa-brands fa-spotify text-spotify-green text-2xl"></i>
                     <h2 class="text-base font-bold tracking-tight" data-i18n="sidebar.title">Your Playlists</h2>
                 </div>
                 <button id="refresh-playlists-btn" data-i18n-title="sidebar.refresh" title="Refresh Playlists" class="text-spotify-subtle hover:text-white transition">
@@ -194,15 +194,20 @@
                 </div>
 
                 <!-- Media Control Buttons -->
-                <div class="flex items-center justify-center space-x-6 pt-2">
-                    <button id="prev-btn" class="text-neutral-400 hover:text-white text-xl transition active:scale-90 focus:outline-none">
-                        <i class="fa-solid fa-backward-step"></i>
+                <div class="flex items-center justify-center space-x-4 md:space-x-6 pt-4">
+                    <button id="prev-btn" class="px-5 py-3 border-2 border-neutral-600 hover:border-white text-neutral-300 hover:text-white rounded-full flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 transition active:scale-95 focus:outline-none bg-neutral-900/60 shadow">
+                        <i class="fa-solid fa-backward-step text-xl"></i>
+                        <span class="text-xs font-semibold tracking-wide uppercase" data-i18n="player.prev">Prev</span>
                     </button>
-                    <button id="play-pause-btn" class="w-14 h-14 bg-white text-black hover:scale-105 transition rounded-full flex items-center justify-center shadow-lg active:scale-95 focus:outline-none">
-                        <i id="play-icon" class="fa-solid fa-play text-xl ml-0.5"></i>
+
+                    <button id="play-pause-btn" class="w-20 h-20 bg-white text-black border-4 border-spotify-green hover:bg-spotify-greenHover transition rounded-full flex flex-col items-center justify-center shadow-xl active:scale-95 focus:outline-none">
+                        <i id="play-icon" class="fa-solid fa-play text-2xl ml-0.5"></i>
+                        <span id="play-text" class="text-[10px] font-bold tracking-tight uppercase leading-none mt-0.5" data-i18n="player.play">Play</span>
                     </button>
-                    <button id="next-btn" class="text-neutral-400 hover:text-white text-xl transition active:scale-90 focus:outline-none">
-                        <i class="fa-solid fa-forward-step"></i>
+
+                    <button id="next-btn" class="px-5 py-3 border-2 border-neutral-600 hover:border-white text-neutral-300 hover:text-white rounded-full flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 transition active:scale-95 focus:outline-none bg-neutral-900/60 shadow">
+                        <span class="text-xs font-semibold tracking-wide uppercase order-2 md:order-1" data-i18n="player.next">Next</span>
+                        <i class="fa-solid fa-forward-step text-xl order-1 md:order-2"></i>
                     </button>
                 </div>
 
@@ -238,6 +243,10 @@
                 "player.disconnect": "Disconnect",
                 "player.noTrackTitle": "No Track Playing",
                 "player.noTrackArtist": "Select a playlist to start streaming",
+                "player.prev": "Prev",
+                "player.next": "Next",
+                "player.play": "Play",
+                "player.pause": "Pause",
                 "status.initializing": "Initializing Web SDK...",
                 "status.active": "Web Player Active",
                 "status.offline": "Web Player Offline",
@@ -262,6 +271,10 @@
                 "player.disconnect": "Desconectar",
                 "player.noTrackTitle": "Sin reproducción",
                 "player.noTrackArtist": "Selecciona una lista para comenzar",
+                "player.prev": "Ant",
+                "player.next": "Sig",
+                "player.play": "Play",
+                "player.pause": "Pausa",
                 "status.initializing": "Iniciando Web SDK...",
                 "status.active": "Reproductor Web Activo",
                 "status.offline": "Reproductor Fuera de Línea",
@@ -286,6 +299,10 @@
                 "player.disconnect": "Déconnexion",
                 "player.noTrackTitle": "Aucun titre en cours",
                 "player.noTrackArtist": "Sélectionnez une playlist pour démarrer",
+                "player.prev": "Préc",
+                "player.next": "Suiv",
+                "player.play": "Jouer",
+                "player.pause": "Pause",
                 "status.initializing": "Initialisation du SDK...",
                 "status.active": "Lecteur Web Actif",
                 "status.offline": "Lecteur Web Hors Ligne",
@@ -310,6 +327,10 @@
                 "player.disconnect": "Trennen",
                 "player.noTrackTitle": "Kein Titel wird abgespielt",
                 "player.noTrackArtist": "Wähle eine Playlist zum Abspielen aus",
+                "player.prev": "Zurück",
+                "player.next": "Weiter",
+                "player.play": "Play",
+                "player.pause": "Pause",
                 "status.initializing": "Web SDK wird initialisiert...",
                 "status.active": "Web Player Aktiv",
                 "status.offline": "Web Player Offline",
@@ -396,6 +417,7 @@
             get albumArt() { return getEl('album-art'); },
             get playPauseBtn() { return getEl('play-pause-btn'); },
             get playIcon() { return getEl('play-icon'); },
+            get playText() { return getEl('play-text'); },
             get prevBtn() { return getEl('prev-btn'); },
             get nextBtn() { return getEl('next-btn'); },
             get progressBar() { return getEl('progress-bar'); },
@@ -749,9 +771,11 @@
 
             if (elements.playIcon) {
                 if (state.paused) {
-                    elements.playIcon.className = "fa-solid fa-play text-xl ml-0.5";
+                    elements.playIcon.className = "fa-solid fa-play text-2xl ml-0.5";
+                    if (elements.playText) elements.playText.textContent = t("player.play");
                 } else {
-                    elements.playIcon.className = "fa-solid fa-pause text-xl";
+                    elements.playIcon.className = "fa-solid fa-pause text-2xl";
+                    if (elements.playText) elements.playText.textContent = t("player.pause");
                 }
             }
 
@@ -798,7 +822,10 @@
                         elements.albumArt.src = data.item.album.images[0].url;
                     }
                     if (elements.playIcon) {
-                        elements.playIcon.className = data.is_playing ? "fa-solid fa-pause text-xl" : "fa-solid fa-play text-xl ml-0.5";
+                        elements.playIcon.className = data.is_playing ? "fa-solid fa-pause text-2xl" : "fa-solid fa-play text-2xl ml-0.5";
+                    }
+                    if (elements.playText) {
+                        elements.playText.textContent = data.is_playing ? t("player.pause") : t("player.play");
                     }
                     if (elements.progressBar && data.item.duration_ms) {
                         elements.progressBar.style.width = `${(data.progress_ms / data.item.duration_ms) * 100}%`;
