@@ -26,7 +26,7 @@
     </script>
 
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -72,6 +72,11 @@
             background: #3e3e3e;
         }
     </style>
+    <style type="text/tailwindcss">
+      @theme {
+      }
+
+    </style>
 </head>
 <body class="bg-black text-white font-sans antialiased min-h-screen flex flex-col justify-between select-none">
 
@@ -85,12 +90,12 @@
     <div class="flex-1 flex flex-col md:flex-row overflow-hidden max-h-screen">
         
         <!-- SIDEBAR: Playlists (Left Column) -->
-        <aside id="sidebar-section" class="hidden w-full md:w-80 bg-spotify-dark flex flex-col border-r border-neutral-800 h-64 md:h-auto overflow-hidden">
+        <aside id="sidebar-section" class="hidden w-full md:w-120 bg-spotify-dark flex flex-col border-r border-neutral-800 h-64 md:h-auto overflow-hidden">
             <!-- Sidebar Header -->
             <div class="p-4 border-b border-neutral-800 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <i class="fa-brands fa-spotify text-spotify-green text-2xl"></i>
-                    <h2 class="text-base font-bold tracking-tight" data-i18n="sidebar.title">Your Playlists</h2>
+                    <h2 class="text-2xl font-bold tracking-tight" data-i18n="sidebar.title">Your Playlists</h2>
                 </div>
                 <button id="refresh-playlists-btn" data-i18n-title="sidebar.refresh" title="Refresh Playlists" class="text-spotify-subtle hover:text-white transition">
                     <i class="fa-solid fa-rotate-right text-sm"></i>
@@ -167,9 +172,9 @@
 
                 <!-- Track Details -->
                 <div class="space-y-1">
-                    <h3 id="track-title" class="text-xl font-bold text-white truncate" data-i18n="player.noTrackTitle">No Track Playing</h3>
-                    <p id="artist-name" class="text-sm text-spotify-subtle truncate" data-i18n="player.noTrackArtist">Select a playlist to start streaming</p>
-                    <p id="album-name" class="text-xs text-neutral-500 truncate">-</p>
+                    <h3 id="track-title" class="text-2xl font-bold text-white truncate" data-i18n="player.noTrackTitle">No Track Playing</h3>
+                    <p id="artist-name" class="text-2xl text-spotify-subtle truncate" data-i18n="player.noTrackArtist">Select a playlist to start streaming</p>
+                    <p id="album-name" class="text-xl text-neutral-500 truncate">-</p>
                 </div>
 
                 <!-- Playback Progress Bar -->
@@ -177,7 +182,7 @@
                     <div class="w-full bg-neutral-800 h-1.5 rounded-full overflow-hidden cursor-pointer" id="progress-bar-container">
                         <div id="progress-bar" class="bg-spotify-green h-full w-0 transition-all duration-300"></div>
                     </div>
-                    <div class="flex justify-between text-[11px] text-spotify-subtle font-mono">
+                    <div class="flex justify-between text-s text-spotify-subtle font-mono">
                         <span id="time-current">0:00</span>
                         <span id="time-total">0:00</span>
                     </div>
@@ -187,16 +192,16 @@
                 <div class="flex items-center justify-center space-x-4 md:space-x-6 pt-4">
                     <button id="prev-btn" class="px-5 py-3 border-2 border-neutral-600 hover:border-white text-neutral-300 hover:text-white rounded-full flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 transition active:scale-95 focus:outline-none bg-neutral-900/60 shadow">
                         <i class="fa-solid fa-backward-step text-xl"></i>
-                        <span class="text-xs font-semibold tracking-wide uppercase" data-i18n="player.prev">Prev</span>
+                        <span class="text-2xl font-semibold tracking-wide uppercase" data-i18n="player.prev">Prev</span>
                     </button>
 
-                    <button id="play-pause-btn" class="w-20 h-20 bg-white text-black border-4 border-spotify-green hover:bg-spotify-greenHover transition rounded-full flex flex-col items-center justify-center shadow-xl active:scale-95 focus:outline-none">
+                    <button id="play-pause-btn" class="w-40 h-20 bg-white text-black border-4 border-spotify-green hover:bg-spotify-greenHover transition rounded-full flex flex-col items-center justify-center shadow-xl active:scale-95 focus:outline-none">
                         <i id="play-icon" class="fa-solid fa-play text-2xl ml-0.5"></i>
-                        <span id="play-text" class="text-[10px] font-bold tracking-tight uppercase leading-none mt-0.5" data-i18n="player.play">Play</span>
+                        <span id="play-text" class="text-2xl font-bold tracking-tight uppercase leading-none mt-0.5" data-i18n="player.play">Play</span>
                     </button>
 
                     <button id="next-btn" class="px-5 py-3 border-2 border-neutral-600 hover:border-white text-neutral-300 hover:text-white rounded-full flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 transition active:scale-95 focus:outline-none bg-neutral-900/60 shadow">
-                        <span class="text-xs font-semibold tracking-wide uppercase order-2 md:order-1" data-i18n="player.next">Next</span>
+                        <span class="text-2xl font-semibold tracking-wide uppercase order-2 md:order-1" data-i18n="player.next">Next</span>
                         <i class="fa-solid fa-forward-step text-xl order-1 md:order-2"></i>
                     </button>
                 </div>
@@ -660,9 +665,9 @@
 
                 return `
                     <div onclick="playPlaylist('${pl.uri}')" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-spotify-hover cursor-pointer group transition">
-                        <img src="${imgUrl}" alt="${pl.name}" class="w-11 h-11 rounded object-cover flex-shrink-0 shadow">
+                        <img src="${imgUrl}" alt="${pl.name}" class="w-20 h-20 rounded object-cover flex-shrink-0 shadow">
                         <div class="flex-1 min-w-0">
-                            <h4 class="text-xs font-semibold text-white group-hover:text-spotify-green truncate transition">${pl.name}</h4>
+                            <h4 class="text-2xl font-semibold text-white group-hover:text-spotify-green text-ellipsis transition">${pl.name}</h4>
                             ${trackBadgeHtml}
                         </div>
                         <i class="fa-solid fa-circle-play text-spotify-green opacity-0 group-hover:opacity-100 text-lg transition"></i>
