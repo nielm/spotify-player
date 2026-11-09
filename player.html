@@ -86,7 +86,7 @@
 
     </style>
 </head>
-<body class="bg-black text-white font-sans antialiased min-h-screen flex flex-col justify-between select-none">
+<body class="bg-black text-white font-sans antialiased h-screen flex flex-col justify-between select-none overflow-hidden">
 
     <!-- Notification Banner -->
     <div id="notification-banner" class="hidden bg-amber-600 text-white text-xs md:text-sm font-medium py-2 px-4 text-center flex justify-between items-center z-50">
@@ -95,7 +95,7 @@
     </div>
 
     <!-- MAIN APP CONTAINER -->
-    <div class="flex-1 flex flex-col md:flex-row overflow-hidden max-h-screen">
+    <div class="flex-1 min-h-0 flex flex-col md:flex-row overflow-hidden">
         
         <!-- SIDEBAR: Playlists (Left Column) -->
         <aside id="sidebar-section" class="hidden w-full md:w-120 bg-spotify-dark flex flex-col border-r border-neutral-800 h-64 md:h-auto overflow-hidden">
@@ -196,38 +196,45 @@
                     </div>
                 </div>
 
-                <!-- Media Control Buttons -->
-                <div class="flex items-center justify-center space-x-4 md:space-x-6 pt-4">
-                    <button id="prev-btn" class="px-5 py-3 border-2 border-neutral-600 hover:border-white text-neutral-300 hover:text-white rounded-full flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 transition active:scale-95 focus:outline-none bg-neutral-900/60 shadow">
-                        <i class="fa-solid fa-backward-step text-xl"></i>
-                        <span class="text-2xl font-semibold tracking-wide uppercase" data-i18n="player.prev">Prev</span>
-                    </button>
-
-                    <button id="play-pause-btn" class="w-40 h-20 bg-white text-black border-4 border-spotify-green hover:bg-spotify-greenHover transition rounded-full flex flex-col items-center justify-center shadow-xl active:scale-95 focus:outline-none">
-                        <i id="play-icon" class="fa-solid fa-play text-2xl ml-0.5"></i>
-                        <span id="play-text" class="text-2xl font-bold tracking-tight uppercase leading-none mt-0.5" data-i18n="player.play">Play</span>
-                    </button>
-
-                    <button id="next-btn" class="px-5 py-3 border-2 border-neutral-600 hover:border-white text-neutral-300 hover:text-white rounded-full flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 transition active:scale-95 focus:outline-none bg-neutral-900/60 shadow">
-                        <span class="text-2xl font-semibold tracking-wide uppercase order-2 md:order-1" data-i18n="player.next">Next</span>
-                        <i class="fa-solid fa-forward-step text-xl order-1 md:order-2"></i>
-                    </button>
-                </div>
-
-                <!-- Volume Control -->
-                <div class="flex items-center space-x-4 pt-4 max-w-xs mx-auto">
-                    <button id="vol-down-btn" title="Decrease volume" class="text-spotify-subtle hover:text-white transition active:scale-90 p-2 focus:outline-none">
-                        <i class="fa-solid fa-volume-low text-2xl"></i>
-                    </button>
-                    <input type="range" id="volume-slider" min="0" max="100" value="70" class="w-full accent-spotify-green bg-neutral-800 h-1.5 rounded-lg appearance-none cursor-pointer">
-                    <button id="vol-up-btn" title="Increase volume" class="text-spotify-subtle hover:text-white transition active:scale-90 p-2 focus:outline-none">
-                        <i class="fa-solid fa-volume-high text-2xl"></i>
-                    </button>
-                </div>
-
             </div>
 
         </main>
+    </div>
+
+    <!-- BOTTOM CONTROLS BAR -->
+    <div id="bottom-controls" class="hidden flex-shrink-0 w-full bg-spotify-card/95 backdrop-blur border-t border-neutral-800 px-4 py-3 md:px-8 md:py-4 shadow-2xl z-40">
+        <div class="flex flex-wrap items-center justify-center gap-6 md:gap-12 w-full">
+            
+            <!-- Playback Controls -->
+            <div class="flex items-center space-x-4 md:space-x-6">
+                <button id="prev-btn" class="px-5 py-3 border-2 border-neutral-600 hover:border-white text-neutral-300 hover:text-white rounded-full flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 transition active:scale-95 focus:outline-none bg-neutral-900/60 shadow cursor-pointer">
+                    <i class="fa-solid fa-backward-step text-xl"></i>
+                    <span class="text-2xl font-semibold tracking-wide uppercase" data-i18n="player.prev">Prev</span>
+                </button>
+
+                <button id="play-pause-btn" class="w-40 h-20 bg-white text-black border-4 border-spotify-green hover:bg-spotify-greenHover transition rounded-full flex flex-col items-center justify-center shadow-xl active:scale-95 focus:outline-none cursor-pointer">
+                    <i id="play-icon" class="fa-solid fa-play text-2xl ml-0.5"></i>
+                    <span id="play-text" class="text-2xl font-bold tracking-tight uppercase leading-none mt-0.5" data-i18n="player.play">Play</span>
+                </button>
+
+                <button id="next-btn" class="px-5 py-3 border-2 border-neutral-600 hover:border-white text-neutral-300 hover:text-white rounded-full flex flex-col md:flex-row items-center justify-center space-y-1 md:space-y-0 md:space-x-2 transition active:scale-95 focus:outline-none bg-neutral-900/60 shadow cursor-pointer">
+                    <span class="text-2xl font-semibold tracking-wide uppercase order-2 md:order-1" data-i18n="player.next">Next</span>
+                    <i class="fa-solid fa-forward-step text-xl order-1 md:order-2"></i>
+                </button>
+            </div>
+
+            <!-- Volume Control -->
+            <div class="flex items-center space-x-4 w-full md:w-80 max-w-sm">
+                <button id="vol-down-btn" title="Decrease volume" class="text-spotify-subtle hover:text-white transition active:scale-90 p-2 focus:outline-none cursor-pointer">
+                    <i class="fa-solid fa-volume-low text-2xl"></i>
+                </button>
+                <input type="range" id="volume-slider" min="0" max="100" value="70" class="w-full accent-spotify-green bg-neutral-800 h-2 rounded-lg appearance-none cursor-pointer">
+                <button id="vol-up-btn" title="Increase volume" class="text-spotify-subtle hover:text-white transition active:scale-90 p-2 focus:outline-none cursor-pointer">
+                    <i class="fa-solid fa-volume-high text-2xl"></i>
+                </button>
+            </div>
+
+        </div>
     </div>
 
     <!-- JAVASCRIPT APPLICATION LOGIC -->
@@ -438,6 +445,7 @@
             get authSection() { return getEl('auth-section'); },
             get playerView() { return getEl('player-view'); },
             get sidebarSection() { return getEl('sidebar-section'); },
+            get bottomControls() { return getEl('bottom-controls'); },
             get clientIdInput() { return getEl('client-id-input'); },
             get currentUrlDisplay() { return getEl('current-url-display'); },
             get loginBtn() { return getEl('login-btn'); },
@@ -615,12 +623,14 @@
             if (elements.authSection) elements.authSection.classList.remove('hidden');
             if (elements.playerView) elements.playerView.classList.add('hidden');
             if (elements.sidebarSection) elements.sidebarSection.classList.add('hidden');
+            if (elements.bottomControls) elements.bottomControls.classList.add('hidden');
         }
 
         function showLoggedInUI() {
             if (elements.authSection) elements.authSection.classList.add('hidden');
             if (elements.playerView) elements.playerView.classList.remove('hidden');
             if (elements.sidebarSection) elements.sidebarSection.classList.remove('hidden');
+            if (elements.bottomControls) elements.bottomControls.classList.remove('hidden');
             if (elements.deviceStatus && !shouldInitSDK()) {
                 elements.deviceStatus.textContent = t("status.controller");
                 elements.deviceStatus.className = "inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-neutral-700 text-neutral-300";
